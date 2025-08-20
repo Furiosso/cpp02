@@ -17,6 +17,16 @@ class	Fixed
 		void	setRawBits(int const raw);
 		int		toInt(void) const;
 		float	toFloat(void) const;
+		bool	operator!=(const Fixed& a) const;
+		bool	operator==(const Fixed& a) const;
+		bool	operator>(const Fixed& a) const;
+		bool	operator<(const Fixed& a) const;
+		bool	operator>=(const Fixed& a) const;
+		bool	operator<=(const Fixed& a) const;
+		Fixed	operator+(const Fixed& a) const;
+		Fixed	operator-(const Fixed& a) const;
+		Fixed	operator*(const Fixed& a) const;
+		Fixed	operator/(const Fixed& a) const;
 	private:
 		int					_fix;
 		static const int	_fr_bits;
