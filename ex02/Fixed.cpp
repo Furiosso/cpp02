@@ -2,35 +2,21 @@
 
 const int	Fixed::_fr_bits = 8;
 
-Fixed::Fixed(void) : _fix(0)
-{
-	std::cout << "Default constructor called" << std::endl;
-}
+Fixed::Fixed(void) : _fix(0) {}
 
-Fixed::Fixed(const int value) : _fix(value << _fr_bits)
-{
-	std::cout << "Int constructor called" << std::endl;
-}
+Fixed::Fixed(const int value) : _fix(value << _fr_bits) {}
 
-Fixed::Fixed(const float value) : _fix(roundf(value * (1 << _fr_bits)))
-{
-	std::cout << "Float constructor called" << std::endl;
-}
+Fixed::Fixed(const float value) : _fix(roundf(value * (1 << _fr_bits)))	{}
 
 Fixed::Fixed(Fixed const& src)
 {
-	std::cout << "Copy constructor called" << std::endl;
 	this->_fix = src.getRawBits();
 }
 
-Fixed::~Fixed(void)
-{
-	std::cout << "Destructor called" << std::endl;
-}
+Fixed::~Fixed(void) {}
 
 Fixed&	Fixed::operator=(Fixed const& rhs)
 {
-	std::cout << "Copy assignment operator called" << std::endl;
 	this->_fix = rhs.getRawBits();
 	return	*this;
 }
@@ -39,7 +25,6 @@ int	Fixed::getRawBits(void) const { return this->_fix; }
 
 void	Fixed::setRawBits(int const raw)
 {
-	std::cout << "setRawBits member function called" << std::endl;
 	this->_fix = raw;
 }
 
@@ -93,8 +78,8 @@ Fixed	Fixed::operator+(const Fixed& a) const
 	Fixed		sum;
 
 	res = static_cast<long long>(this->_fix) + a.getRawBits();
-	if (!_check_limits(res, "Overflow in addition"))
-		return sum;
+	if (!_check_limits(res, "addition"))
+		return *this;
 	sum.setRawBits(static_cast<int>(res));
 	return sum;
 }
@@ -105,8 +90,8 @@ Fixed	Fixed::operator-(const Fixed& a) const
 	Fixed		subs;
 
 	res = static_cast<long long>(this->_fix) - a.getRawBits();
-	if (!_check_limits(res, "Overflow in substraction"))
-		return subs;
+	if (!_check_limits(res, "substraction"))
+		return *this;
 	subs.setRawBits(static_cast<int>(res));
 	return subs;
 }
@@ -118,8 +103,8 @@ Fixed	Fixed::operator*(const Fixed& a) const
 
 	res = static_cast <long long>(this->_fix) * a.getRawBits();
 	res >>= _fr_bits;
-	if (!_check_limits(res, "Overflow in multiplication"))
-		return product;
+	if (!_check_limits(res, "multiplication"))
+		return *this;
 	product.setRawBits(static_cast<int>(res));
 	return product;
 }
@@ -132,10 +117,96 @@ Fixed	Fixed::operator/(const Fixed& a) const
 
 	dividend = static_cast<long long>(this->_fix) << _fr_bits;
 	res = dividend / a.getRawBits();
-	if (!_check_limits(res, "Overflow in division"))
-		return quotient;
+	if (!_check_limits(res, "division"))
+		return *this;
 	quotient.setRawBits(static_cast<int>(res));
 	return quotient;
+}
+
+Fixed&	Fixed::operator++(void)
+{
+	long long	res;
+
+	res = (static_cast<long long>(this->_fix) + 1) << _fr_bits;
+	if (_check_limits(res, "prefix incrementation"))
+		++(this->_fix);
+	return *this;
+}
+
+Fixed	Fixed::operator++(int)
+{
+	Fixed		obj = *this;
+	long long	res;
+
+	res = (static_cast<long long>(this->_fix) + 1) << _fr_bits;
+	if (_check_limits(res, "postfix incrementation"))
+		++(this->_fix);
+	return	obj;
+}
+
+Fixed&	Fixed::operator--(void)
+{
+	long long	res;
+
+	res = (static_cast<long long>(this->_fix) - 1) << _fr_bits;
+	if (_check_limits(res, "prefix decrementation"))
+		--(this->_fix);
+	return *this;
+}
+
+Fixed	Fixed::operator--(int)
+{
+	Fixed		obj = *this;
+	long long	res;
+
+	res = (static_cast<long long>(this->_fix) - 1);
+	if (_check_limits(res, "postfix decrementation"))
+		--(this->_fix);
+	return	obj;
+}
+
+Fixed&	Fixed::min(Fixed& a, Fixed& b)
+{
+	if (a <= b)
+	{
+		if (a == b)
+			std::cout << " Both numbers are equal ";
+		return a;
+	}
+	return b;
+}
+
+const Fixed&	Fixed::min(const Fixed& a, const Fixed& b)
+{
+	if (a <= b)
+	{
+		if (a == b)
+			std::cout << " Both numbers are equal ";
+		return a;
+	}
+	return b;
+}
+
+Fixed&	Fixed::max(Fixed& a, Fixed& b)
+{
+	if (a >= b)
+	{
+		if (a == b)
+			std::cout << " Both numbers are equal ";
+		return a;
+	}
+	return b;
+}
+
+const Fixed&	Fixed::max(const Fixed& a, const Fixed& b)
+{
+	if (a >= b)
+	{
+		if (a == b)
+			std::cout << " Both numbers are equal ";
+		return a;
+	}
+	return b;
 }
 
 int	Fixed::_check_limits(const long long& num, const std::string& err_message)
@@ -143,7 +214,7 @@ int	Fixed::_check_limits(const long long& num, const std::string& err_message)
 	if (num > static_cast<long long>(std::numeric_limits<int>::max())
 		|| num < static_cast<long long>(std::numeric_limits<int>::min()))
 		{
-			std::cerr << "Error" << std::endl << err_message << std::endl;
+			std::cerr << " Error: overflow in " << err_message << ". Value unchanged ";
 			return 0;
 		}
 	return 1;
