@@ -89,30 +89,64 @@ bool	Fixed::operator<=(const Fixed& a) const
 
 Fixed	Fixed::operator+(const Fixed& a) const
 {
-	float	res;
+	long long	res;
+	Fixed		sum;
 
-	res = static_cast <float>(this->_fix + a.getRawBits());
-	res /= (1 << _fr_bits);
-	return Fixed(res);
+	res = static_cast<long long>(this->_fix) + a.getRawBits();
+	if (!_check_limits(res, "Overflow in addition"))
+		return sum;
+	sum.setRawBits(static_cast<int>(res));
+	return sum;
 }
 
 Fixed	Fixed::operator-(const Fixed& a) const
 {
-	float	res;
+	long long	res;
+	Fixed		subs;
 
-	res = static_cast <float>(this->_fix - a.getRawBits());
-	res /= (1 << _fr_bits);
-	return Fixed(res);
+	res = static_cast<long long>(this->_fix) - a.getRawBits();
+	if (!_check_limits(res, "Overflow in substraction"))
+		return subs;
+	subs.setRawBits(static_cast<int>(res));
+	return subs;
 }
 
 Fixed	Fixed::operator*(const Fixed& a) const
 {
-	return Fixed(this->toFloat() * a.toFloat());
+	long long	res;
+	Fixed		product;
+
+	res = static_cast <long long>(this->_fix) * a.getRawBits();
+	res >>= _fr_bits;
+	if (!_check_limits(res, "Overflow in multiplication"))
+		return product;
+	product.setRawBits(static_cast<int>(res));
+	return product;
 }
 
 Fixed	Fixed::operator/(const Fixed& a) const
 {
-	return Fixed(this->toFloat() / a.toFloat());
+	long long	res;
+	long long	dividend;
+	Fixed		quotient;
+
+	dividend = static_cast<long long>(this->_fix) << _fr_bits;
+	res = dividend / a.getRawBits();
+	if (!_check_limits(res, "Overflow in division"))
+		return quotient;
+	quotient.setRawBits(static_cast<int>(res));
+	return quotient;
+}
+
+int	Fixed::_check_limits(const long long& num, const std::string& err_message)
+{
+	if (num > static_cast<long long>(std::numeric_limits<int>::max())
+		|| num < static_cast<long long>(std::numeric_limits<int>::min()))
+		{
+			std::cerr << "Error" << std::endl << err_message << std::endl;
+			return 0;
+		}
+	return 1;
 }
 
 std::ostream&	operator<<(std::ostream& o, Fixed const& value)

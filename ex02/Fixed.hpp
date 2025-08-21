@@ -2,7 +2,9 @@
 # define FIXED_HPP
 
 # include <iostream>
+# include <limits>
 # include <cmath>
+# include <string>
 
 class	Fixed
 {
@@ -30,6 +32,7 @@ class	Fixed
 	private:
 		int					_fix;
 		static const int	_fr_bits;
+		static int			_check_limits(const long long& num, const std::string& err_message);
 };
 
 std::ostream&	operator<<(std::ostream& o, Fixed const& value);
