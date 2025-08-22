@@ -10,9 +10,9 @@ class Point
 		Point(float x, float y);
 		Point(const Point& src);
 		~Point();
-		Point& operator=(const Point& rhs);
-		Fixed	getX(void) const;
-		Fixed	getY(void) const;
+		Point& 		operator=(const Point& rhs);
+		const Fixed	getX(void) const;
+		const Fixed	getY(void) const;
 	private:
 		const Fixed	_x;
 		const Fixed	_y;

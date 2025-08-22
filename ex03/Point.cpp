@@ -13,17 +13,16 @@ Point::~Point(void) {}
 
 Point&	Point::operator=(const Point& rhs)
 {
-	static_cast<Fixed>(this->_x) = rhs.getX();
-	static_cast<Fixed>(this->_y) = rhs.getY(); 
+	static_cast<void>(rhs);
 	return *this;
 }
 
-Fixed	Point::getX(void) const
+const Fixed	Point::getX(void) const
 {
 	return this->_x;
 }
 
-Fixed	Point::getY(void) const
+const Fixed	Point::getY(void) const
 {
 	return this->_y;
 }
