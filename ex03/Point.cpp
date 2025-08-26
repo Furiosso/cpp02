@@ -13,7 +13,6 @@ Point::~Point(void) {}
 
 Point&	Point::operator=(const Point& rhs)
 {
-	const Fixed& x = rhs.getX();
 	const_cast<Fixed&>(this->_x) = rhs.getX();
 	const_cast<Fixed&>(this->_y) = rhs.getY();
 	return *this;

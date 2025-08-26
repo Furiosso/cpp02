@@ -3,6 +3,7 @@
 int main() {
     Fixed a(1.5f);
     Fixed b(-1);
+    Fixed e(7);
 
     std::cout << "a > b: " << (a > b) << std::endl;  // Imprime 1 (true)
     std::cout << "a < b: " << (a < b) << std::endl;  // Imprime 0 (false)
@@ -15,6 +16,7 @@ int main() {
     std::cout << "a + b: " << (a + b) << std::endl;
     std::cout << "a - b: " << (a - b) << std::endl;
     std::cout << "a * b: " << (a * b) << std::endl;
+    std::cout << "a * b + e: " << (a * b + e) << std::endl;
     std::cout << "a / b: " << (a / b) << std::endl; 
     std::cout << "++a: " << ++a << std::endl;
     std::cout << "a++: " << a++ << std::endl;
