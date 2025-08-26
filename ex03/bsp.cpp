@@ -1,14 +1,13 @@
-# include "Point.hpp"
+#include "Point.hpp"
 
 static Fixed   calculate_cross_product(const Point A, const Point B, const Point C)
 {
-    return (C.getX() - A.getX()) * (B.getY() - A.getY()) - (C.getY() - A.getY()) * (B.getX() - C.getX());
+	return (C.getX() - A.getX()) * (B.getY() - A.getY()) - (B.getX() - A.getX()) * (C.getY() - A.getY());
 }
 static bool    check_point_position(Fixed v1, Fixed v2, Fixed v3)
 {
-    Fixed   crossed_products[3] = {v1, v2, v3};
-
-    if ((v1 > 0 && v2 > 0 && v3 > 0) || (v1 < 0 && v2 < 0 && v3 < 0))
+    if ((v1 > 0 && v2 > 0 && v3 > 0)
+		|| (v1 < 0 && v2 < 0 && v3 < 0))
         return true;
     return false;
 }

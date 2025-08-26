@@ -4,9 +4,29 @@ const int	Fixed::_fr_bits = 8;
 
 Fixed::Fixed(void) : _fix(0) {}
 
-Fixed::Fixed(const int value) : _fix(value << _fr_bits) {}
+Fixed::Fixed(const int value)
+{
+	long long temp = static_cast<long long>(value) << _fr_bits; 
 
-Fixed::Fixed(const float value) : _fix(roundf(value * (1 << _fr_bits)))	{}
+    if (!_check_limits(temp, "integer constructor")) {
+        _fix = 0;
+        std::cerr << "Value set to 0" << std::endl;
+    } else {
+        _fix = static_cast<int>(temp);
+    }
+}
+
+Fixed::Fixed(const float value)
+{
+	long long temp = static_cast<long long>(roundf(value * (1 << _fr_bits))); 
+
+    if (!_check_limits(temp, "float constructor")) {
+        _fix = 0;
+        std::cerr << "Value set to 0" << std::endl;
+    } else {
+        _fix = static_cast<int>(temp);
+    }
+}
 
 Fixed::Fixed(Fixed const& src)
 {
@@ -114,9 +134,16 @@ Fixed	Fixed::operator/(const Fixed& a) const
 	long long	res;
 	long long	dividend;
 	Fixed		quotient;
+	int			raw;
 
+	raw = a.getRawBits();
+	if (raw == 0)
+	{
+		std::cerr << "Input too low. Value unchanged "; 
+		return *this;
+	}
 	dividend = static_cast<long long>(this->_fix) << _fr_bits;
-	res = dividend / a.getRawBits();
+	res = dividend / raw;
 	if (!_check_limits(res, "division"))
 		return *this;
 	quotient.setRawBits(static_cast<int>(res));
@@ -127,7 +154,7 @@ Fixed&	Fixed::operator++(void)
 {
 	long long	res;
 
-	res = (static_cast<long long>(this->_fix) + 1) << _fr_bits;
+	res = (static_cast<long long>(this->_fix) + 1);
 	if (_check_limits(res, "prefix incrementation"))
 		++(this->_fix);
 	return *this;
@@ -138,7 +165,7 @@ Fixed	Fixed::operator++(int)
 	Fixed		obj = *this;
 	long long	res;
 
-	res = (static_cast<long long>(this->_fix) + 1) << _fr_bits;
+	res = (static_cast<long long>(this->_fix) + 1);
 	if (_check_limits(res, "postfix incrementation"))
 		++(this->_fix);
 	return	obj;
@@ -148,7 +175,7 @@ Fixed&	Fixed::operator--(void)
 {
 	long long	res;
 
-	res = (static_cast<long long>(this->_fix) - 1) << _fr_bits;
+	res = (static_cast<long long>(this->_fix) - 1);
 	if (_check_limits(res, "prefix decrementation"))
 		--(this->_fix);
 	return *this;
