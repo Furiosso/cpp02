@@ -2,7 +2,7 @@ CC = c++
 
 NAME = fixed
 
-CFLAGS = -Wall -Wextra -Werror -std=c++98 -fsanitize="address,leak" -g3
+CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 CFILES = main.cpp\
 		 Fixed.cpp
