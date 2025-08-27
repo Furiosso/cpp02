@@ -1,5 +1,5 @@
 #ifndef BSP_H
-# define PSP_H
+# define BSP_H
 
 # include "Point.hpp"
 

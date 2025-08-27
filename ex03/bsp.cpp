@@ -4,6 +4,7 @@ static Fixed   calculate_cross_product(const Point A, const Point B, const Point
 {
 	return (C.getX() - A.getX()) * (B.getY() - A.getY()) - (B.getX() - A.getX()) * (C.getY() - A.getY());
 }
+
 static bool    check_point_position(Fixed v1, Fixed v2, Fixed v3)
 {
     if ((v1 > 0 && v2 > 0 && v3 > 0)
@@ -11,6 +12,7 @@ static bool    check_point_position(Fixed v1, Fixed v2, Fixed v3)
         return true;
     return false;
 }
+
 bool    bsp(Point const a, Point const b, Point const c, Point const point)
 {
     Fixed   v1;
